@@ -1,0 +1,26 @@
+{
+  "name": "bitnacle",
+  "version": "1.0.0-beta",
+  "description": "Dead simple logger module",
+  "author": "David del Puerto Martín <ddelpuertomartin@gmail.com> (https://github.com/daviddelpuerto)",
+  "main": "./index.js",
+  "homepage": "https://github.com/daviddelpuerto/bitnacle",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/daviddelpuerto/bitnacle"
+  },
+  "keywords": [
+    "bitnacle",
+    "log",
+    "logger",
+    "loglevel",
+    "json"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "bitnacle-helpers": "^1.0.0-beta"
+  }
+}
