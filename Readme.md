@@ -8,7 +8,7 @@
 npm i bitnacle
 ```
 
-## Usage
+## Quick start
 
 ```javascript
 const Bitnacle = require('bitnacle');
@@ -22,17 +22,22 @@ logger.log({
 logger.debug('This is a debug message');
 ```
 
-```Bitnacle``` uses 2 formats. ```simple``` is the default format and logs **plain text** log messages, if you want ```Bitnacle``` to output _json-stringified_ like log messages _you can specify the **json format**_.
+They both produce the same output:  
+```
+[2019-08-25T15:49:47:928+0200] [DEBUG] [This is a debug message]
+```
+
+## Formats 
+
+```Bitnacle``` uses 2 formats:
+
+- ```simple```: is the default format and logs **plain text** log messages
+- ```json```: outputs _json-stringified_ like log messages.
 
 ```Bitnacle``` creates log messages with the following structure:
 
 ```
 [:time] [:level] [:message]
-```
-
-They both produce the same output:  
-```
-[2019-08-25T15:49:47:928+0200] [DEBUG] [This is a debug message]
 ```
 
 To use the ```json``` format:
@@ -52,7 +57,7 @@ jsonLogger.debug('This is a debug message');
 {"time":"2019-08-25T16:38:01:202+0200","level":"DEBUG","message":"This is a debug message"}
 ```
 
-### **Usage with express**
+## **Usage with express**
 
 If you are using ```Bitnacle``` with ```Express```, you can pass the request object to ```Bitnacle``` for extra info. 
 
@@ -74,13 +79,13 @@ app.get('/', function(req, res) {
 });
 ```
 
-```simple``` format  
+### ```simple``` format  
 
 ```
 [2019-08-25T16:07:52:686+0200] [DEBUG] [GET] [/] [::1] [cd657929-e0da-4f9b-ad92-d6a4551a7636] [This is a debug message]
 ```
 
-```json``` format:
+### ```json``` format:
 
 ```json
 {"time":"2019-08-25T16:36:08:810+0200","level":"DEBUG","method":"GET","endpoint":"/","remoteAddress":"::1","id":"e5c87f07-f635-4f31-b86a-42bab7a35494","message":"This is a debug message"}
@@ -98,17 +103,13 @@ app.get('/', function(req, res) {
 
 ```javascript
 const logger = new Bitnacle({
-    format: 'json' // optional: default is simple
+    format: 'json' // optional: default is "simple"
 });
 
 logger.error('Your error message');
-logger.error('Your error message', req);
 logger.warning('Your warning message');
-logger.warning('Your warning message', req);
 logger.info('Your info message');
-logger.info('Your info message', req);
 logger.debug('Your debug message');
-logger.debug('Your debug message', req);
 ```
 
 If you want to use your own levels, you can specify the level using ```logger.log```:
