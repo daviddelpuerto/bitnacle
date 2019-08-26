@@ -14,7 +14,9 @@
     "log",
     "logger",
     "loglevel",
-    "json"
+    "json",
+    "express",
+    "easy"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
