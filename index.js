@@ -9,7 +9,7 @@ class Bitnacle {
         this.format = 'simple';
 
         if (this.options.format) {
-            if (bitnacleFormats[this.options.format] === undefined) {
+            if (this.options.format === 'extended' || bitnacleFormats[this.options.format] === undefined) {
                 throw new Error('Invalid format for Bitnacle, use one of the following: simple or json.');
             }
 

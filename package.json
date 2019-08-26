@@ -1,6 +1,6 @@
 {
   "name": "bitnacle",
-  "version": "1.0.0-beta",
+  "version": "1.0.1-beta",
   "description": "Dead simple logger module",
   "author": "David del Puerto Martín <ddelpuertomartin@gmail.com> (https://github.com/daviddelpuerto)",
   "main": "./index.js",
