@@ -18,23 +18,40 @@ class Bitnacle {
 
     }
 
-    log({ level, message, req }) {
+    getRequestPropsFromExtraInfo(extraInfo) {
+        if (!extraInfo) return {};
+        if (!extraInfo.req) return {};
 
-        const time = bitnacleTimer.getRequestTime();
+        const { req } = extraInfo;
+
+        if (typeof req !== 'object') {
+            throw new Error('extraInfo.req must be an object');
+        }
+
+        const method = req && req.method;
         const endpoint = req && (req.originalUrl || req.url);
         const remoteAddress = req && (req.clientIp || req.ip);
         const id = req && req.id;
-        const method = req && req.method;
+
+        return { method, endpoint, remoteAddress, id };
+    }
+
+    log({ level, message, extraInfo }) {
+
+        if (extraInfo && typeof extraInfo !== 'object') {
+            throw new Error('You must pass an object as "extraInfo" to Bitnacle');
+        }
+
+        const time = bitnacleTimer.getRequestTime();
+
+        const req = this.getRequestPropsFromExtraInfo(extraInfo);
+        const extra = extraInfo && extraInfo.extra;
 
         const logMessageObject = {
             time,
             level,
-            req: {
-                method,
-                endpoint,
-                remoteAddress,
-                id
-            },
+            req,
+            extra,
             message
         }
 
@@ -47,35 +64,35 @@ class Bitnacle {
         }
     }
 
-    error(err, req) {
+    error(err, extraInfo) {
         this.log({
             level: 'ERROR', 
             message: err, 
-            req
+            extraInfo
         });
     }
 
-    warning(message, req) {
+    warning(message, extraInfo) {
         this.log({
             level: 'WARNING', 
             message, 
-            req
+            extraInfo
         });
     }
 
-    info(message, req) {
+    info(message, extraInfo) {
         this.log({
             level: 'INFO', 
             message, 
-            req
+            extraInfo
         });
     }
 
-    debug(message, req) {
+    debug(message, extraInfo) {
         this.log({
             level: 'DEBUG', 
             message, 
-            req
+            extraInfo
         });
     }
 
