@@ -57,11 +57,41 @@ jsonLogger.debug('This is a debug message');
 {"time":"2019-08-25T16:38:01:202+0200","level":"DEBUG","message":"This is a debug message"}
 ```
 
-## **Usage with express**
+## Loggin extra info
 
-If you are using ```Bitnacle``` with ```Express```, you can pass the request object to ```Bitnacle``` for extra info. 
+If you want to add more info to your loggs you can do it by passing an ```extraInfo``` object to ```Bitnacle```. 
 
-> Note that ```Bitnacle``` is compatible with [request-ip](https://www.npmjs.com/package/request-ip) and [express-request-id](https://www.npmjs.com/package/express-request-id) and it will log the ```clientIp``` and ```id``` if they are present on the ```request``` object.
+> **IMPORTANT**: if you create a nested object it won't be logged if using ```simple``` format, but ```json``` format will do it for you.
+
+```javascript
+const extra = {
+    someKey: 'someValue',
+    anotherKey: 'anotherValue',
+    yetAnotherKey: 'yetAnotherValue',
+    someObjectProp: {
+        someKeyInsideObjectProp: 'someValueInsideObjectProp'
+    }
+};
+
+const extraInfo = { extra };
+logger.debug('This is a debug message', extraInfo);
+```
+
+Outputs for ```simple``` and ```json``` formats, note the nested object **is not being logged** with ```simple``` format:
+
+```
+[2019-08-26T18:07:07:226+0200] [DEBUG] [someValue] [anotherValue] [yetAnotherValue] [This is a debug message]
+```
+
+```json
+{"time":"2019-08-26T18:07:42:949+0200","level":"DEBUG","someKey":"someValue","anotherKey":"anotherValue","yetAnotherKey":"yetAnotherValue","someObjectProp":{"someKeyInsideObjectProp":"someInsideObjectPropValue"},"message":"This is a debug message"}
+```
+
+### **Usage with express**
+
+If you are using ```Bitnacle``` with ```Express```, you can pass the request object to ```Bitnacle``` for even more extra info. This is really usefull for debug purposes, since you can have ```Bitnacle``` and [bitnacle-express](https://www.npmjs.com/package/bitnacle-express) working together identifying your requests easily.
+
+> Note that ```Bitnacle``` is compatible with [request-ip](https://www.npmjs.com/package/request-ip) and [express-request-id](https://www.npmjs.com/package/express-request-id) and it will log the ```clientIp``` and ```id``` props if they are present on the ```request``` object.
 
 This is the log message structure:
 
@@ -72,30 +102,54 @@ This is the log message structure:
 ```javascript
 app.get('/', function(req, res) {
 
-    logger.debug('This is a debug message', req);
+    const extraInfo = { req };
+    logger.debug('This is a debug message', extraInfo);
 
     ...
 
 });
 ```
 
-### ```simple``` format  
+Outputs for ```simple``` and ```json``` formats:
 
 ```
 [2019-08-25T16:07:52:686+0200] [DEBUG] [GET] [/] [::1] [cd657929-e0da-4f9b-ad92-d6a4551a7636] [This is a debug message]
 ```
 
-### ```json``` format:
-
 ```json
 {"time":"2019-08-25T16:36:08:810+0200","level":"DEBUG","method":"GET","endpoint":"/","remoteAddress":"::1","id":"e5c87f07-f635-4f31-b86a-42bab7a35494","message":"This is a debug message"}
 ```
+
+### **More extra fun**
+
+It's not over yet!  
+Of course you can pass both ```extra``` and ```req``` objects in ```extraInfo``` and ```Bitnacle``` will log it, now you have tons of info! :D  
+Wikipedia who?  
+
+The log structure if using ```extra``` and ```req``` objects together would be:
+
+```
+[:time] [:level] [:method] [:endpoint] [:remoteAddress] [:requestId] [someValue] [anotherValue] [yetAnotherValue] [:message]
+```
+
+Outputs for ```simple``` and ```json``` formats:
+
+```
+[2019-08-26T18:18:50:817+0200] [DEBUG] [GET] [/] [::1] [9c9d856c-1684-41c0-893d-3d047e80a01c] [someValue] [anotherValue] [yetAnotherValue] [This is a debug message]
+```
+
+```json
+{"time":"2019-08-26T18:21:50:351+0200","level":"DEBUG","method":"GET","endpoint":"/","remoteAddress":"::1","id":"19f486b4-9510-4b66-84f1-90ebbadf4fcd","someKey":"someValue","anotherKey":"anotherValue","yetAnotherKey":"yetAnotherValue","someObjectProp":{"someKeyInsideObjectProp":"someInsideObjectPropValue"},"message":"This is a debug message"}
+```
+
+Just don't get too crazy logging whatever comes to your mind!
+
 
 ## **Log level API**
 
 ```Bitnacle``` exposes a predefined set of level functions you can use directly.
 
-- Default levels for Bitnacle are the following:  
+- Default levels for ```Bitnacle``` are the following:  
     - ERROR  
     - WARNING  
     - INFO  
@@ -112,9 +166,9 @@ logger.info('Your info message');
 logger.debug('Your debug message');
 ```
 
-If you want to use your own levels, you can specify the level using ```logger.log```:
+If you want to use your own levels, you can specify the level using ```logger.log```.
 
-You can pass the request object to ```logger.log``` aswell:
+Of course you can pass the ```extraInfo``` object to ```logger.log``` for you daily dose of info!
 
 ```javascript
 app.get('/', function(req, res) {
@@ -122,7 +176,10 @@ app.get('/', function(req, res) {
     logger.log({
         level: 'YOUR-CUSTOM-LEVEL',
         message: 'Your log message',
-        req: req
+        extraInfo: {
+            req,
+            extra
+        }
     })
 
     ...
