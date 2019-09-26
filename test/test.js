@@ -19,3 +19,22 @@ describe('#constructor', function() {
         expect(() => new Bitnacle({ format: 'invalidFormat' })).to.throw();
     });
 });
+
+describe('#getRequestFromExtraInfo()', function() {
+    const logger = new Bitnacle();
+
+    it('should return an empty object if extraInfo or extraInfo.req are missing', function() {
+        expect(logger.getRequestPropsFromExtraInfo()).to.be.an.instanceOf(Object).to.be.empty;
+        expect(logger.getRequestPropsFromExtraInfo({})).to.be.an.instanceOf(Object).to.be.empty;
+    });
+
+    it('should throw if extraInfo.req is not an object', function() {
+        expect(() => logger.getRequestPropsFromExtraInfo({ req: 'req' })).to.throw();
+    });
+
+    it('should return an object with request info', function() {
+        expect(logger.getRequestPropsFromExtraInfo({
+            req: { method: 'GET' }
+        })).to.be.an.instanceOf(Object).to.have.property('method', 'GET');
+    });
+});
