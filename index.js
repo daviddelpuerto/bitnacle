@@ -53,7 +53,7 @@ class Bitnacle {
             req,
             extra,
             message
-        }
+        };
 
         const logMessage = bitnacleFormats[this.format](logMessageObject);
 
