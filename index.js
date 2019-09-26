@@ -19,8 +19,7 @@ class Bitnacle {
     }
 
     getRequestPropsFromExtraInfo(extraInfo) {
-        if (!extraInfo) return {};
-        if (!extraInfo.req) return {};
+        if (!extraInfo || !extraInfo.req) return {};
 
         const { req } = extraInfo;
 
