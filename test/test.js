@@ -33,6 +33,8 @@ describe('#getRequestFromExtraInfo()', function() {
     it('should return an object with request info', function() {
         expect(genericLogger.getRequestPropsFromExtraInfo({
             req: { method: 'GET' }
-        })).to.be.an.instanceOf(Object).to.have.property('method', 'GET');
+        }))
+        .to.be.an.instanceOf(Object)
+        .to.have.property('method', 'GET');
     });
 });
