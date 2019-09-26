@@ -19,10 +19,16 @@
     "easy"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "nyc mocha"
   },
   "license": "MIT",
   "dependencies": {
     "bitnacle-helpers": "^1.1.0-beta"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "eslint": "^6.4.0",
+    "istanbul": "^0.4.5",
+    "mocha": "^6.2.0"
   }
 }
