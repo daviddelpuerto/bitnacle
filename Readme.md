@@ -1,6 +1,7 @@
 # Bitnacle
 
 ![build:passing](https://img.shields.io/travis/daviddelpuerto/bitnacle)
+![npm](https://img.shields.io/npm/v/bitnacle)
 
 ```Bitnacle``` is a dead simple logger module.
 
