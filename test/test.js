@@ -5,8 +5,7 @@ const genericLogger = new Bitnacle();
 
 function testConsoleOutput({ output, level, message }) {
     const regEx = new RegExp(`\\[\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}:\\d{3}[+-]\\d{4}\\] \\[${level}\\] \\[${message}\\]\\n`);
-    const match = regEx.test(output[0]);
-    return match;
+    return regEx.test(output[0]);
 };
 
 describe('#constructor', function() {
@@ -82,6 +81,24 @@ describe('#log()', function() {
             .to.include(extra2);
     });
 
+    it('should log to stderr', function() {
+        const level = 'ERROR';
+        const message = 'Error message';
+
+        const output = stderr.inspectSync(function() {
+            genericLogger.log({
+                level,
+                message,
+            });
+        });
+
+        expect(testConsoleOutput({
+            output,
+            level,
+            message
+        })).to.be.true;
+    });
+
 });
 
 describe('#error()', function() {
@@ -93,11 +110,11 @@ describe('#error()', function() {
             genericLogger[level.toLowerCase()](message);
         });
 
-        testConsoleOutput({
+        expect(testConsoleOutput({
             output,
             level, 
             message
-        });
+        })).to.be.true;
     });
 });
 
@@ -110,11 +127,11 @@ describe('#warning()', function() {
             genericLogger[level.toLowerCase()](message);
         });
 
-        testConsoleOutput({
+        expect(testConsoleOutput({
             output,
             level, 
             message
-        });
+        })).to.be.true;
     });
 });
 
@@ -127,11 +144,11 @@ describe('#info()', function() {
             genericLogger[level.toLowerCase()](message);
         });
 
-        testConsoleOutput({
+        expect(testConsoleOutput({
             output,
             level, 
             message
-        });
+        })).to.be.true;
     });
 });
 
@@ -144,10 +161,10 @@ describe('#debug()', function() {
             genericLogger[level.toLowerCase()](message);
         });
 
-        testConsoleOutput({
+        expect(testConsoleOutput({
             output,
             level, 
             message
-        });     
+        })).to.be.true; 
     });
 });
