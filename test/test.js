@@ -4,8 +4,9 @@ const Bitnacle = require('../index');
 const genericLogger = new Bitnacle();
 
 function testConsoleOutput({ output, level, message }) {
-    const regEx = new RegExp(`\\[\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}:\\d{3}\\+\\d{4}\\] \\[${level}\\] \\[${message}\\]\\n`);
-    output[0].match(regEx);
+    const regEx = new RegExp(`\\[\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}:\\d{3}[+-]\\d{4}\\] \\[${level}\\] \\[${message}\\]\\n`);
+    const match = regEx.test(output[0]);
+    return match;
 };
 
 describe('#constructor', function() {
@@ -60,15 +61,13 @@ describe('#log()', function() {
     });
 
     it('should log extraInfo.extra', function() {
-        const level = 'LEVEL';
-        const message = 'Test message'
         const extra1 = 'extra1';
         const extra2 = 'extra2';
 
         const output = stdout.inspectSync(function() {
             genericLogger.log({
-                level,
-                message,
+                level: 'LEVEL',
+                message: 'Test message',
                 extraInfo: {
                     extra: {
                         extra1,
@@ -81,12 +80,6 @@ describe('#log()', function() {
         expect(output[0])
             .to.include(extra1)
             .to.include(extra2);
-
-        testConsoleOutput({
-            level,
-            message,
-            output
-        });
     });
 
 });
