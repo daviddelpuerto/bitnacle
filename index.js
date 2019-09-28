@@ -1,6 +1,6 @@
 'use-strict';
 
-const { bitnacleFormats, bitnacleTimer } = require('bitnacle-helpers');
+const { bitnacleLevels, bitnacleFormats, bitnacleTimer } = require('bitnacle-helpers');
 
 class Bitnacle {
 
@@ -56,7 +56,7 @@ class Bitnacle {
 
         const logMessage = bitnacleFormats[this.format](logMessageObject);
 
-        if (level && (level === 'ERROR' || level === 'WARNING')) {
+        if (level && (level === bitnacleLevels.ERROR || level === bitnacleLevels.WARNING)) {
             process.stderr.write(`${logMessage}\n`);
         } else {
             process.stdout.write(`${logMessage}\n`);
@@ -65,7 +65,7 @@ class Bitnacle {
 
     error(err, extraInfo) {
         this.log({
-            level: 'ERROR', 
+            level: bitnacleLevels.ERROR, 
             message: err, 
             extraInfo
         });
@@ -73,7 +73,7 @@ class Bitnacle {
 
     warning(message, extraInfo) {
         this.log({
-            level: 'WARNING', 
+            level: bitnacleLevels.WARNING, 
             message, 
             extraInfo
         });
@@ -81,7 +81,7 @@ class Bitnacle {
 
     info(message, extraInfo) {
         this.log({
-            level: 'INFO', 
+            level: bitnacleLevels.INFO, 
             message, 
             extraInfo
         });
@@ -89,7 +89,7 @@ class Bitnacle {
 
     debug(message, extraInfo) {
         this.log({
-            level: 'DEBUG', 
+            level: bitnacleLevels.DEBUG, 
             message, 
             extraInfo
         });
