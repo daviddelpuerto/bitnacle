@@ -56,7 +56,7 @@ class Bitnacle {
 
         const logMessage = bitnacleFormats[this.format](logMessageObject);
 
-        if (level && (level === bitnacleLevels.ERROR || level === bitnacleLevels.WARNING)) {
+        if (level && (level === bitnacleLevels.levels.ERROR || level === bitnacleLevels.levels.WARNING)) {
             process.stderr.write(`${logMessage}\n`);
         } else {
             process.stdout.write(`${logMessage}\n`);
@@ -65,7 +65,7 @@ class Bitnacle {
 
     error(err, extraInfo) {
         this.log({
-            level: bitnacleLevels.ERROR, 
+            level: bitnacleLevels.levels.ERROR, 
             message: err, 
             extraInfo
         });
@@ -73,7 +73,7 @@ class Bitnacle {
 
     warning(message, extraInfo) {
         this.log({
-            level: bitnacleLevels.WARNING, 
+            level: bitnacleLevels.levels.WARNING, 
             message, 
             extraInfo
         });
@@ -81,7 +81,7 @@ class Bitnacle {
 
     info(message, extraInfo) {
         this.log({
-            level: bitnacleLevels.INFO, 
+            level: bitnacleLevels.levels.INFO, 
             message, 
             extraInfo
         });
@@ -89,7 +89,7 @@ class Bitnacle {
 
     debug(message, extraInfo) {
         this.log({
-            level: bitnacleLevels.DEBUG, 
+            level: bitnacleLevels.levels.DEBUG, 
             message, 
             extraInfo
         });
