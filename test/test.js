@@ -84,7 +84,7 @@ describe('#log()', function() {
     it('should log to stderr', function() {
         const level = 'ERROR';
         const message = 'Error message';
-
+     
         const output = stderr.inspectSync(function() {
             genericLogger.log({
                 level,
@@ -119,11 +119,11 @@ describe('#error()', function() {
 });
 
 describe('#warning()', function() {
-    it('Bitnacle.warning should log correct message to process.stderr', function() {
+    it('Bitnacle.warning should log correct message to process.out', function() {
         const level = 'WARNING';
         const message = 'Warning message';
 
-        const output = stderr.inspectSync(function() {
+        const output = stdout.inspectSync(function() {
             genericLogger[level.toLowerCase()](message);
         });
 
