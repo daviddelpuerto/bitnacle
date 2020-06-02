@@ -1,6 +1,8 @@
 'use-strict';
 
-const { bitnacleLevels, bitnacleFormats, bitnacleTimer } = require('bitnacle-helpers');
+const {
+  bitnacleLevels, bitnacleFormats, bitnacleTimer, bitnacleUtils,
+} = require('bitnacle-helpers');
 
 class Bitnacle {
   constructor(options) {
@@ -13,6 +15,13 @@ class Bitnacle {
       }
 
       this.format = this.options.format;
+    }
+
+    if (this.options.streams && this.options.streams.length) {
+      this.streams = this.options.streams.map((appStream, index) => {
+        if (bitnacleUtils.isWritableStream(appStream)) return appStream;
+        throw new Error(`stream[${index}] is not a writable stream\n`);
+      });
     }
   }
 
@@ -40,9 +49,7 @@ class Bitnacle {
       throw new Error('You must pass an object as "extraInfo" to Bitnacle');
     }
 
-
     const messageToLog = message.message || message;
-    // console.log(messageToLog);
 
     const time = bitnacleTimer.getRequestTime();
 
@@ -57,12 +64,18 @@ class Bitnacle {
       message: messageToLog,
     };
 
-    const logMessage = bitnacleFormats[this.format](logMessageObject);
+    const logMessage = `${bitnacleFormats[this.format](logMessageObject)}\n`;
 
     if (level && (level === bitnacleLevels.levels.ERROR)) {
-      process.stderr.write(`${logMessage}\n`);
+      process.stderr.write(logMessage);
     } else {
-      process.stdout.write(`${logMessage}\n`);
+      process.stdout.write(logMessage);
+    }
+
+    if (this.streams) {
+      this.streams.forEach((stream) => {
+        stream.write(logMessage);
+      });
     }
   }
 
