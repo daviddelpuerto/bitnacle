@@ -192,3 +192,15 @@ app.get('/', function(req, res) {
     
 });
 ```
+
+## Log to stream files
+
+In order to log to files, you must create streams and pass them to bitnacle. You can add as many streams as you want:
+
+```javascript
+const writableStream = fs.createWriteStream('./access.log', { flags: 'a' });
+
+const logger = new Bitnacle({
+    streams: [ writableStream ]
+});
+```
