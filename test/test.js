@@ -1,7 +1,15 @@
 const { expect } = require('chai');
 const { stdout, stderr } = require('test-console');
 const Bitnacle = require('../index');
+const fs = require('fs');
+
+fs.writeFileSync('./sample.log');
+const writableStream = fs.createWriteStream('./sample.log');
+
 const genericLogger = new Bitnacle();
+const loggerWithStreams = new Bitnacle({
+    streams: [ writableStream ]
+});
 
 function testConsoleOutput({ output, level, message }) {
     const regEx = new RegExp(`\\[\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}:\\d{3}[+-]\\d{4}\\] \\[${level}\\] \\[${message}\\]\\n`);
@@ -24,6 +32,22 @@ describe('#constructor', function() {
         expect(() => new Bitnacle({ format: 'extended' })).to.throw();
         expect(() => new Bitnacle({ format: 'invalidFormat' })).to.throw();
     });
+
+    it('should throw if options.streams includes non writable streams', function() {
+        expect(() => new Bitnacle({
+            streams: [
+                writableStream,
+                'Invalid stream'
+            ]
+        })).to.throw();
+    });
+
+    it('should create a logger if streams are writable streams', function() {
+        const logger = new Bitnacle({ streams: [ writableStream ] });
+        expect(logger).to.be.an.instanceOf(Bitnacle);
+        expect(logger.streams).to.include(writableStream);
+    });
+
 });
 
 describe('#getRequestFromExtraInfo()', function() {
@@ -87,6 +111,24 @@ describe('#log()', function() {
      
         const output = stderr.inspectSync(function() {
             genericLogger.log({
+                level,
+                message,
+            });
+        });
+
+        expect(testConsoleOutput({
+            output,
+            level,
+            message
+        })).to.be.true;
+    });
+
+    it('should log with streams', function() {
+        const level = 'INFO';
+        const message = 'Info message';
+     
+        const output = stdout.inspectSync(function() {
+            loggerWithStreams.log({
                 level,
                 message,
             });
