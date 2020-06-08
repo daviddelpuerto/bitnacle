@@ -3,8 +3,9 @@ const { stdout, stderr } = require('test-console');
 const Bitnacle = require('../index');
 const fs = require('fs');
 
-fs.writeFileSync('./sample.log');
-const writableStream = fs.createWriteStream('./sample.log');
+const LOG_FILE = './test/sample.log';
+
+const writableStream = fs.createWriteStream(LOG_FILE);
 
 const genericLogger = new Bitnacle();
 const loggerWithStreams = new Bitnacle({
