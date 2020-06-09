@@ -19,7 +19,7 @@
     "easy"
   ],
   "scripts": {
-    "lint": "eslint index.js --fix",
+    "lint": "eslint index.js ./test --fix",
     "test": "npm run lint && nyc --reporter=html --reporter=text mocha"
   },
   "license": "MIT",
